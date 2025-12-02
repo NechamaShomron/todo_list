@@ -58,7 +58,7 @@ export async function completeTodo(formData: FormData) {
   const id = formData.get("id")?.toString();
   if (!id) return;
 
-  const todos = (await readTodos()).map(t =>
+  const todos = (await readTodos()).map((t: TodoItem) =>
     t.id === id ? { ...t, status: TodoStatus.Completed } : t
   );
   await saveTodos(todos);
@@ -72,7 +72,7 @@ export async function deleteTodo(formData: FormData) {
   const id = formData.get("id")?.toString();
   if (!id) return;
 
-  const todos = (await readTodos()).map(t =>
+  const todos = (await readTodos()).map((t: TodoItem) =>
     t.id === id ? { ...t, status: TodoStatus.Deleted } : t
   );
   await saveTodos(todos);
