@@ -27,10 +27,14 @@ async function saveTodos(todos: TodoItem[]) {
   await fs.writeFile(filePath, JSON.stringify(todos, null, 2));
 }
 
-const createId = (): string =>
-  `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+const createId = (): string => {
+    if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+      return crypto.randomUUID();
+    }
+    return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+  };
 
-// Add a new todo
+
 export async function addTodo(formData: FormData) {
   "use server";
   const text = formData.get("text")?.toString().trim();
@@ -40,10 +44,10 @@ export async function addTodo(formData: FormData) {
   todos.unshift({ id: createId(), text, status: TodoStatus.Task });
   await saveTodos(todos);
 
-  redirect("/"); // reload page to show new task
+  redirect("/");
 }
 
-// Complete todo
+
 export async function completeTodo(formData: FormData) {
   "use server";
   const id = formData.get("id")?.toString();
@@ -54,10 +58,10 @@ export async function completeTodo(formData: FormData) {
   );
   await saveTodos(todos);
 
-  redirect("/"); // reload page to show change
+  redirect("/");
 }
 
-// Delete todo (strikethrough)
+
 export async function deleteTodo(formData: FormData) {
   "use server";
   const id = formData.get("id")?.toString();
@@ -68,7 +72,7 @@ export async function deleteTodo(formData: FormData) {
   );
   await saveTodos(todos);
 
-  redirect("/"); // reload page to show change
+  redirect("/"); 
 }
 
 // Get todos

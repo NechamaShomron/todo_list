@@ -8,7 +8,6 @@ export default async function Page() {
   const deletedTasks = todos.filter(t => t.status === TodoStatus.Deleted);
   const completedTasks = todos.filter(t => t.status === TodoStatus.Completed);
 
-  // Active tasks first, then deleted tasks in order they were deleted (bottom)
   const tasks = [...activeTasks, ...deletedTasks];
 
   return (
@@ -16,8 +15,6 @@ export default async function Page() {
       <main className={styles.main}>
         <div className={styles.container}>
           <h1 className={styles.title}>Todo List</h1>
-
-          {/* Add Todo */}
           <form action={addTodo} className={styles.form}>
             <input
               type="text"
