@@ -1,7 +1,7 @@
 "use server";
 
 import { promises as fs } from "fs";
-import path from "path";
+import { join } from "path";
 import { redirect } from "next/navigation";
 
 export enum TodoStatus {
@@ -16,11 +16,16 @@ export interface TodoItem {
   status: TodoStatus;
 }
 
-const filePath = path.join(process.cwd(), "data", "todos.json");
 
-async function readTodos(): Promise<TodoItem[]> {
-  const data = await fs.readFile(filePath, "utf-8");
-  return JSON.parse(data);
+const filePath = join(process.cwd(), "data", "todos.json");
+
+async function readTodos() {
+  try {
+    const data = await fs.readFile(filePath, "utf-8");
+    return JSON.parse(data);
+  } catch {
+    return []; 
+  }
 }
 
 async function saveTodos(todos: TodoItem[]) {
